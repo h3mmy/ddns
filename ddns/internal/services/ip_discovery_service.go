@@ -23,23 +23,21 @@ func NewIPDiscoveryService(dProvider models.DiscoveryProvider) *IPDiscoveryServi
 }
 
 // Gets external IPv4 Address
-// TODO: Use context for discovery requests
-func (ipds *IPDiscoveryService) GetSelfV4(ctx context.Context) (*netip.Addr, error) {
-	ipv4, err := ipds.discoveryProvider.GetIPv4()
+func (ipds *IPDiscoveryService) GetSelfV4(ctx context.Context) (netip.Addr, error) {
+	ipv4, err := ipds.discoveryProvider.GetIPv4(ctx)
 	if err != nil {
 		ipds.logger.Debug("error getting external ipv4 address", zap.Error(err))
-		return nil, err
+		return netip.Addr{}, err
 	}
-	return &ipv4, nil
+	return ipv4, err
 }
 
 // Gets external IPv6 Address
-// TODO: Use context for discovery requests
-func (ipds *IPDiscoveryService) GetSelfV6(ctx context.Context) (*netip.Addr, error) {
-	ipv6, err := ipds.discoveryProvider.GetIPv6()
+func (ipds *IPDiscoveryService) GetSelfV6(ctx context.Context) (netip.Addr, error) {
+	ipv6, err := ipds.discoveryProvider.GetIPv6(ctx)
 	if err != nil {
-		ipds.logger.Debug("error getting external ipv4 address", zap.Error(err))
-		return nil, err
+		ipds.logger.Debug("error getting external ipv6 address", zap.Error(err))
+		return netip.Addr{}, err
 	}
-	return &ipv6, nil
+	return ipv6, err
 }

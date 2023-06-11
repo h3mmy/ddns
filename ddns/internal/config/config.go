@@ -70,7 +70,7 @@ func LoadConfig() *DDNSConfig {
 	// Set Defaults
 	viper.SetDefault("devMode", false)
 	viper.SetDefault("logLevel", "info")
-
+	viper.SetDefault("logging.outfile", "ddns.log")
 	// Add config paths
 	viper.SetConfigName("config")
 	viper.SetConfigType("yaml")
@@ -134,11 +134,19 @@ func (dc *DDNSConfig) GetRootConfig() *viper.Viper {
 	return dc.config
 }
 
-func ParseLogLeve(logLevel string) zapcore.Level {
+func (dc *DDNSConfig) GetLogConfig() *LoggingConfig {
+	return &dc.LoggingConfig
+}
+
+func ParseLogLevel(logLevel string) zapcore.Level {
 	l, err := zapcore.ParseLevel(logLevel)
 	if err != nil {
 		fmt.Printf("Could not parse provided log level: %s. Defaulting to info\n", logLevel)
 		return zapcore.InfoLevel
 	}
 	return l
+}
+
+func (c *LoggingConfig) GetLogLevel() zapcore.Level {
+	return ParseLogLevel(c.Level)
 }

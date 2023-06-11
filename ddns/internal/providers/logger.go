@@ -6,5 +6,5 @@ import (
 )
 
 func NewLogger() *zap.Logger {
-	return log.NewZapLogger()
+	return log.NewCommonLogger()
 }

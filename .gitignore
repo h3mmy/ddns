@@ -16,3 +16,6 @@
 
 # Local Dev
 config.yaml
+b_*.go
+b_*.yaml
+b_*.txt

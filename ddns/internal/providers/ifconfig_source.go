@@ -1,6 +1,7 @@
 package providers
 
 import (
+	"context"
 	"net/netip"
 
 	"github.com/h3mmy/ddns/ddns/internal/discovery"
@@ -10,8 +11,8 @@ import (
 )
 
 const (
-	ifconfigV4 = "https://ifconfig.me/ip"
-	ifconfigV6 = "https://ifconfig.co/ip"
+	// string versions replace suffix /json with /ip
+	ifconfigCo = "http://ifconfig.co/json"
 )
 
 func IfConfigTask() models.DiscoveryTask {
@@ -23,25 +24,21 @@ func IfConfigTask() models.DiscoveryTask {
 }
 
 type IfConfigSource struct {
-	clientV4 *discovery.HTTPSource
-	clientV6 *discovery.HTTPSource
-	parser   models.ContentParser
+	client *discovery.HTTPSource
 }
 
 func NewIfConfigSource() *IfConfigSource {
 	return &IfConfigSource{
-		clientV4: discovery.NewHTTPSource(ifconfigV4),
-		clientV6: discovery.NewHTTPSource(ifconfigV6),
-		parser:   discovery.IfConfigParser,
+		client: discovery.NewHTTPSource(ifconfigCo, discovery.IfConfigJsonParser),
 	}
 }
 
 // Gets IPv4 address
-func (ifs *IfConfigSource) GetIPv4() (netip.Addr, error) {
-	return ifs.parser(ifs.clientV4.GetRaw())
+func (ifs *IfConfigSource) GetIPv4(ctx context.Context) (netip.Addr, error) {
+	return ifs.client.GetIPWithContext(ctx, models.V4)
 }
 
 // Gets IPv6 address
-func (ifs *IfConfigSource) GetIPv6() (netip.Addr, error) {
-	return ifs.parser(ifs.clientV6.GetRaw())
+func (ifs *IfConfigSource) GetIPv6(ctx context.Context) (netip.Addr, error) {
+	return ifs.client.GetIPWithContext(ctx, models.V6)
 }

@@ -5,20 +5,22 @@ import (
 	"go.uber.org/zap/zapcore"
 )
 
+var pkgKey = "package"
+
 func NewLoggerForSource(sourceName string) *zap.Logger {
-	return NewZapLogger().With(
-		zapcore.Field{Key: "source", Type: zapcore.StringType, String: sourceName},
+	return NewCommonLogger().Named(sourceName).With(
+		zapcore.Field{Key: pkgKey, Type: zapcore.StringType, String: "source"},
 	)
 }
 
 func NewLoggerForService(serviceName string) *zap.Logger {
-	return NewZapLogger().With(
-		zapcore.Field{Key: "service", Type: zapcore.StringType, String: serviceName},
+	return NewCommonLogger().Named(serviceName).With(
+		zapcore.Field{Key: pkgKey, Type: zapcore.StringType, String: "service"},
 	)
 }
 
 func NewLoggerForHandler(handlerName string) *zap.Logger {
-	return NewZapLogger().With(
-		zapcore.Field{Key: "handler", Type: zapcore.StringType, String: handlerName},
+	return NewCommonLogger().Named(handlerName).With(
+		zapcore.Field{Key: pkgKey, Type: zapcore.StringType, String: "handler"},
 	)
 }
