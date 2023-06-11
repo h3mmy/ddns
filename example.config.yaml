@@ -1,0 +1,7 @@
+---
+logging:
+  level: info
+strategy:
+  ipv6:
+    type: prefix
+    prefixLength: 60

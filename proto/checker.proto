@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+option go_package= "ddns/pb";
+
+package pb;
+
+service DDNSService {
+    rpc UpdateDDNSRecord(DDNSUpdateRequest) returns (DDNSUpdateResponse);
+    rpc GetStatus(GetStatusRequest) returns (GetStatusResponse);
+    rpc GetCurrentIP(GetCurrentIPRequest) returns (GetCurrentIPResponse);
+}
+
+message DDNSUpdateRequest {
+    string domain = 1;
+    string ip_address = 2;
+}
+
+message DDNSUpdateResponse {
+    enum Status {
+        SUCCESS = 0;
+        FAILURE = 1;
+    }
+
+    Status status = 1;
+}
+
+message GetCurrentIPRequest {}
+
+message GetCurrentIPResponse {
+    string ip_v4 = 1;
+    string ip_v6 = 2;
+}
+
+message GetStatusRequest {}
+
+message GetStatusResponse {
+    enum Status {
+        SUCCESS = 0;
+        FAILURE = 1;
+    }
+
+    Status status = 1;
+}
